@@ -65,7 +65,7 @@ const Singleton = (function() {
         get: () => Singleton._getInstance,
         //shown throw error when tried to overriden by setting the property using =
         set: () => { throw new Error("getInstance property shouldn't be overridden"); },
-        enumerable: false,
+        enumerable: true,
         configurable: false
     });
 
