@@ -57,9 +57,12 @@ const [Subject, Observer] = (() => {
         }
 
         update() {
-            throw new Error(`notify method is not implemented in  ${this.constructor.name} (Observer)`);
+            throw new Error(`update method is not implemented in  ${this.constructor.name} (Observer)`);
         }
     }
+
+    Object.freeze(Subject);
+    Object.freeze(Observer);
 
     return [Subject, Observer];
 })();
