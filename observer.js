@@ -15,20 +15,16 @@ const [Subject, Observer] = (() => {
             this.actions = {
                 addObserver: (observer) => observers.add(observer),
                 removeObserver: (observer) => observers.delete(observer),
-                clearAllObservers: () => observers.clear(),
                 updateObservers: () => observers.forEach(observer => {
                     observer.addSubject(this);
                     observer.update();
-                }),
-                get length() {
-                    return observers.size;
-                }
+                })
             }
         }
 
         _validate(observer) {
             if(!(observer instanceof Observer)) {
-                throw new Error("the given observer is not a valid type, either it should be Observer or sub-class of it");
+                throw new Error("the observer supplied is not a valid type, either it should be Observer or sub-class of it");
             }
         }
 
@@ -116,6 +112,15 @@ for(let i=2; i < 5; i++) {
     r.subscribe(observers[i]);
     w.subscribe(observers[i]);
 }
+
+// r.subscribe({notify: function() {
+//     console.log('lol');
+// }});
+
+// r.unsubscribe({notify: function() {
+//     console.log('lol');
+// }});
+// r.unsubscribe(Object.create(observers[2]));
 
 r.notify();
 w.notify();
