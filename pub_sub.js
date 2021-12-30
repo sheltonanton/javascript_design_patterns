@@ -44,18 +44,26 @@ const world = pubsub.subscribe('world', function(data) {
     console.log('world ' + data);
 });
 
+let hello2 = null;
 for(let i=0; i < 20; i++) {
     if(i == 5) {
         world.unsubscribe();
     }
     if(i == 10) {
-        pubsub.subscribe('hello', function(data) {
+        hello2 = pubsub.subscribe('hello', function(data) {
             console.log('hello2 ' + data);
         });
     }
+
+    if(i == 15) {
+        hello.unsubscribe();
+        hello2.unsubscribe();
+    }
+
     if(i % 2 == 0) {
         pubsub.publish('hello', i);
     }else{
         pubsub.publish('world', i);
     }
+    pubsub.publish('another', i);
 }
