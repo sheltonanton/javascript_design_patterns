@@ -74,35 +74,4 @@ const Singleton = (function() {
     return Singleton;
 })();
 
-/**
- * Implementation of singleton here
- */
-
-class Implement extends Singleton {
-    constructor() {
-        super();
-        this.value = Math.random();
-    }
-}
-
-class Another extends Singleton {
-    constructor() {
-        super();
-        this.value = Math.random() + 10;
-    }
-}
-
-let a = Implement.getInstance();
-let b = Another.getInstance();
-console.log(a.value);
-console.log(b.value);
-a = Implement.getInstance();
-b = Another.getInstance();
-console.log(a.value);
-console.log(b.value);
-let c = Singleton.getInstance();
-
-Object.defineProperty(Implement, "getInstance", {value: () => ({ value: "lol" })});
-console.log(a.value, a);
-console.log(b.value, b);
-console.log(c);
+export default Singleton;

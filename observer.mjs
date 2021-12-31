@@ -8,16 +8,16 @@
  * 5. an observer can subscribe to one or more events
  */
 
-const [Subject, Observer] = (() => {
+const [_Subject, _Observer] = (() => {
     class Subject {
         constructor() {
             const observers = new Set();
             this.actions = {
                 addObserver: (observer) => observers.add(observer),
                 removeObserver: (observer) => observers.delete(observer),
-                updateObservers: () => observers.forEach(observer => {
+                updateObservers: (data) => observers.forEach(observer => {
                     observer.addSubject(this);
-                    observer.update();
+                    observer.update(data);
                 })
             }
         }
@@ -38,8 +38,8 @@ const [Subject, Observer] = (() => {
             this.actions.removeObserver(observer);
         }
 
-        notify() {
-            this.actions.updateObservers();
+        notify(data) {
+            this.actions.updateObservers(data);
         }
     }
 
@@ -67,63 +67,5 @@ const [Subject, Observer] = (() => {
     return [Subject, Observer];
 })();
 
-class ReadSubject extends Subject {
-    name = "read";
-}
-
-class WriteSubject extends Subject {
-    name = "write";
-}
-
-class AsyncObserver extends Observer {
-    constructor(name) {
-        super();
-        this.name = name;
-    }
-
-    update() {
-        console.log(`${this.name} ${this.getSubject().name}`);
-    }
-}
-
-let r = new ReadSubject();
-let w = new WriteSubject();
-
-const observers = [];
-for(let i=0; i < 10; i++) {
-    const observer = new AsyncObserver(i);
-    r.subscribe(observer);
-    w.subscribe(observer);
-    observers.push(observer);
-}
-
-r.notify();
-w.notify();
-
-for(let i=0; i < 5; i++) {
-    r.unsubscribe(observers[i]);
-    w.unsubscribe(observers[i]);
-}
-
-
-for(let i=0; i < 5; i++) {
-    r.unsubscribe(observers[i]);
-    w.unsubscribe(observers[i]);
-}
-
-for(let i=2; i < 5; i++) {
-    r.subscribe(observers[i]);
-    w.subscribe(observers[i]);
-}
-
-// r.subscribe({notify: function() {
-//     console.log('lol');
-// }});
-
-// r.unsubscribe({notify: function() {
-//     console.log('lol');
-// }});
-// r.unsubscribe(Object.create(observers[2]));
-
-r.notify();
-w.notify();
+export const Subject = _Subject;
+export const Observer = _Observer;

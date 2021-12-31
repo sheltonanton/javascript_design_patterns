@@ -4,18 +4,25 @@
  * 2. it implements a module, which contains the subscrbed callbacks
  * 3. subscribe, unsubscribe and publish function
  */
+import Singleton from './singleton.mjs';
 
-class PubSub {
+class PubSub extends Singleton{
     topics = {}
 
     publish(topic, data) {
         if(!this.topics[topic]) {
             return;
         }
-        this.topics[topic].forEach(callback => callback(data));
+        this.topics[topic].forEach(callback => {
+            callback(data)
+        });
     }
 
     subscribe(topic, callback) {
+        if(callback === null || typeof callback !== 'function') {
+            throw new Error("Not a valid callback function");
+        }
+        
         if(!this.topics[topic]) {
             this.topics[topic] = [];
         }
@@ -32,38 +39,4 @@ class PubSub {
     }
 }
 
-//testing
-
-const pubsub = new PubSub();
-
-const hello = pubsub.subscribe('hello', function(data) {
-    console.log('hello ' + data);
-});
-
-const world = pubsub.subscribe('world', function(data) {
-    console.log('world ' + data);
-});
-
-let hello2 = null;
-for(let i=0; i < 20; i++) {
-    if(i == 5) {
-        world.unsubscribe();
-    }
-    if(i == 10) {
-        hello2 = pubsub.subscribe('hello', function(data) {
-            console.log('hello2 ' + data);
-        });
-    }
-
-    if(i == 15) {
-        hello.unsubscribe();
-        hello2.unsubscribe();
-    }
-
-    if(i % 2 == 0) {
-        pubsub.publish('hello', i);
-    }else{
-        pubsub.publish('world', i);
-    }
-    pubsub.publish('another', i);
-}
+export default PubSub;

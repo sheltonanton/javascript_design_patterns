@@ -63,24 +63,3 @@ const AsyncQueue = (() => {
 
     return AsyncQueue;
 })();
-
-
-const queue = new AsyncQueue();
-for(let i=0; i < 10; i++) {
-    setTimeout(() => {
-        queue.enqueue(i);
-    }, Math.random() * 10000);
-}
-
-const execute = async () => {
-    let count = 0;
-    for await(const data of queue) {
-        console.log(data);
-        count += 1;
-        if(count == 10) {
-            break;
-        }
-    }
-}
-
-execute();
