@@ -71,11 +71,15 @@ const Model = (() => {
                 _getProperty: function(property) {
                     return `property<'${property}'>`;
                 },
+                get: function(target, property) {
+                    return Reflect.get(target._values, property);
+                },
                 set: function(target, property, value) {
                     const old = target._values[property];
                     const result = Reflect.set(target._values, property, value);
 
                     target.notify({
+                        model: name,
                         attribute: property,
                         old,
                         new: value
@@ -122,7 +126,9 @@ const Model = (() => {
 export class ModelObserver extends Observer {
     constructor(callback) {
         super();
-        this._callback = callback;
+        if(callback) {
+            this._callback = callback;
+        }
     }
 
     update(data) {
