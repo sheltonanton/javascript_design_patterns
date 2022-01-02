@@ -11,19 +11,14 @@ import Model, { ModelObserver } from './model.mjs';
 class Component extends ModelObserver {
     constructor(props) {
         super();
+        
         const model = this.model(props);
         this.init(props, model);
         if(model instanceof Model) {
             model.listen(this);
         }
 
-        const _actions = this.actions || {};
-        this.render.call({
-            ...model,
-            actions: {
-                ..._actions
-            }
-        });
+        this.render();
     }
 
     init() {
@@ -46,12 +41,6 @@ class Component extends ModelObserver {
 export default Component;
 
 class ViewComponent extends Component {
-    actions = {
-        call: function() {
-            console.log('called');
-        }
-    }
-
     model() {
         return {
             name: "Infant Antony Shelton"
@@ -65,8 +54,4 @@ class ViewComponent extends Component {
     render() {
         console.log(this);
     }
-
 }
-
-const component = new ViewComponent();
-console.log(component);
