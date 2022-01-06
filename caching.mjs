@@ -26,16 +26,3 @@ const cacher = (() => {
     return cacher;
 })();
 export default cacher;
-
-function factorial(n) {
-    if(n == 1) {
-        return 1;
-    }
-    return (n * factorial(n-1));
-}
-
-factorial = cacher(factorial);
-console.log(factorial(10));
-console.log(factorial(9));
-console.log(factorial(11));
-console.log(factorial(10));
